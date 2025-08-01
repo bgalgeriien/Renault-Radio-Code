@@ -1,95 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Générateur de Code</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Générateur de Code Radio Renault</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #f1f1f1;
-    }
-
-    .container {
-      background: white;
-      max-width: 400px;
-      margin: auto;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
+      padding: 40px;
+      background-color: #f4f4f4;
     }
-
-    .logo {
-      display: block;
-      margin: 0 auto 1rem auto;
-      max-width: 120px;
-      height: auto;
-      border-radius: 1rem;
+    img {
+      width: 150px;
+      margin-bottom: 20px;
     }
-
     input, button {
-      width: 100%;
-      padding: 0.7rem;
-      margin: 0.5rem 0;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+      padding: 10px;
+      font-size: 18px;
+      margin-top: 10px;
     }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
     #result {
-      margin-top: 1rem;
+      margin-top: 20px;
+      font-size: 24px;
       font-weight: bold;
-      font-size: 1.2rem;
+      color: #2c3e50;
     }
   </style>
 </head>
 <body>
-
-  <div class="container">
-    <img src="https://bgalgeri.github.io/Renault-Radio-Code/logo.png" alt="Logo Renault Radio Code" class="logo">
-    <h2>Générateur de Code</h2>
-    <input type="text" id="precode" placeholder="Entrez un précode (ex: B698)" maxlength="4">
-    <button onclick="generateCode()">Générer le code</button>
-    <div id="result"></div>
-  </div>
-
-  <script>
-    function code(precode) {
-      precode = precode.toUpperCase();
-      if (!/^[A-Z]\d{3}$/.test(precode) || precode.startsWith("A0")) {
-        return '';
-      }
-      let x = precode.charCodeAt(1) + precode.charCodeAt(0) * 10 - 698;
-      let y = precode.charCodeAt(3) + precode.charCodeAt(2) * 10 + x - 528;
-      let z = (y * 7) % 100;
-      let result = Math.floor(z / 10) + (z % 10) * 10 + ((259 % x) % 100) * 100;
-      return result.toString().padStart(4, '0');
-    }
-
-    function generateCode() {
-      const input = document.getElementById("precode").value.trim();
-      const result = code(input);
-      document.getElementById("result").textContent = result ? `Code généré : ${result}` : "Précode invalide !";
-    }
-  </script>
-
-</body>
-</html>    <button onclick="generateCode()">Générer le code</button>
-    <div id="result"></div>
-  </div>
+  <img src="techdoc888_logo.png" alt="Logo">
+  <h1>Générateur de Code Radio Renault</h1>
+  
+  <input type="text" id="precode" placeholder="Entrez le précode (ex: B698)" maxlength="4" />
+  <br />
+  <button onclick="genererCode()">Générer le Code</button>
+  
+  <div id="result"></div>
 
   <script>
     function code(precode) {
@@ -97,19 +44,18 @@
       if (!/^[A-Z]\d{3}$/.test(precode) || precode.startsWith("A0")) {
         return '';
       }
-      let x = precode.charCodeAt(1) + precode.charCodeAt(0) * 10 - 698;
-      let y = precode.charCodeAt(3) + precode.charCodeAt(2) * 10 + x - 528;
-      let z = (y * 7) % 100;
-      let result = Math.floor(z / 10) + (z % 10) * 10 + ((259 % x) % 100) * 100;
-      return result.toString().padStart(4, '0');
+      const x = precode.charCodeAt(1) + precode.charCodeAt(0) * 10 - 698;
+      const y = precode.charCodeAt(3) + precode.charCodeAt(2) * 10 + x - 528;
+      const z = (y * 7) % 100;
+      const finalCode = Math.floor(z / 10) + (z % 10) * 10 + ((259 % x) % 100) * 100;
+      return finalCode.toString().padStart(4, '0');
     }
 
-    function generateCode() {
-      const input = document.getElementById("precode").value.trim();
-      const result = code(input);
-      document.getElementById("result").textContent = result ? `Code généré : ${result}` : "Précode invalide !";
+    function genererCode() {
+      const precode = document.getElementById('precode').value.trim();
+      const result = code(precode);
+      document.getElementById('result').textContent = result ? `Code : ${result}` : "Précode invalide.";
     }
   </script>
-
 </body>
 </html>
