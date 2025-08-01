@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Renault Code G茅n茅rateur</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Renault Radio Code</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="lang-switch">
-    <button onclick="switchLang('fr')">馃嚝馃嚪 Fran莽ais</button>
-    <button onclick="switchLang('en')">馃嚞馃嚙 English</button>
-  </div>
-
   <div class="container">
-    <img src="techdoc888_logo.png" alt="Logo" class="logo">
-    <h1 data-lang="title">G茅n茅rateur de code autoradio Renault</h1>
+    <img src="techdoc888_logo.png" alt="Logo" class="logo" />
 
-    <form onsubmit="event.preventDefault(); generateCode();">
-      <label for="precode" data-lang="label">Entrez le pr茅code :</label>
-      <input type="text" id="precode" required>
-      <button type="submit" data-lang="button">Obtenir le code</button>
-    </form>
+    <div class="explanation">
+      <p>Le précode doit être composé d'une lettre suivie de 3 chiffres (exemple : A123).</p>
+      <p>Le précode est écrit en arrière de l'autoradio, mais peut être récupéré sans le démontage en appuyant simultanément sur les touches 1 et 6 (ou 1 et 5), puis, toute en les maintenant, sur le bouton d'alimentation.</p>
+      <p><strong>Le calcul du code ne fonctionne pas pour les précodes qui commencent avec A0.</strong></p>
+    </div>
+
+    <div id="input-container">
+      <input type="text" id="precode" placeholder="Entrez votre précode" maxlength="4" />
+      <button onclick="calculateCode()">Calculer le code</button>
+    </div>
 
     <p id="result"></p>
 
-    <div class="instructions">
-      <h2 data-lang="instructions-title">Comment trouver le pr茅code ?</h2>
-      <p data-lang="instructions">
-        Le pr茅code doit 锚tre compos茅 d'une lettre suivie de 3 chiffres (exemple : A123).<br>
-        Il est inscrit 脿 l鈥檃rri猫re de l鈥檃utoradio, mais peut 锚tre affich茅 sans d茅montage en appuyant sur les touches 1 et 6 (ou 1 et 5) tout en maintenant le bouton d鈥檃limentation.<br>
-        鈿狅笍 Le calcul du code ne fonctionne pas pour les pr茅codes qui commencent par A0.
-      </p>
+    <div class="language-buttons">
+      <button onclick="setLanguage('fr')">FR</button>
+      <button onclick="setLanguage('en')">EN</button>
     </div>
   </div>
 
