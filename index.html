@@ -1,52 +1,79 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Générateur de Code Autoradio Renault</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="logo.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" href="techdoc888_logo.png">
+  <meta name="Description" content="Générateur de code d'autoradio Renault en local, dans le navigateur, sans envoi des données sur un serveur. Auteur: inconnu.">
+  <meta name="keywords" content="Renault,code,precode,radio,autoradio">
+  <meta name="google-site-verification" content="KhDaWEmnAvfDL6ee_o1-HZUwzGILY7CorSlcsumaQvU" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="main.css">
+  <script defer src="main.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.4.1/dist/cdn.min.js"></script>
+  <title>Générateur de code autoradio Renault</title>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1>Générateur de Code Autoradio Renault</h1>
-  </header>
-  
-  <main>
-    <form id="codeForm">
-      <label for="precode">Entrez le précode :</label>
-      <input type="text" id="precode" name="precode" required pattern="[A-Z][0-9]{3}" placeholder="Ex: A123">
-      <button type="submit">Générer le code</button>
-    </form>
-    <p id="resultat"></p>
-    <p class="instructions">
-      Le précode doit être composé d'une lettre suivie de 3 chiffres (exemple : A123).<br>
-      Le précode est écrit à l'arrière de l'autoradio, mais peut être récupéré sans démontage en appuyant sur les touches <strong>1 et 6</strong> (ou <strong>1 et 5</strong>) selon le modèle.
-    </p>
-  </main>
-
-  <footer>
-    <div class="langues">
-      <a href="index.html">FR</a>
-      <a href="en.html">EN</a>
-      <a href="es.html">ES</a>
+  <div x-data="rcode" class="container" x-cloak>
+    <div class="jumbotron text-center">
+      <img src="techdoc888_logo.png" alt="Logo TechDoc888" class="logo mb-3">
+      <p class="lang">Français | <a href="en.html">English</a> | <a href="es.html">Español</a></p>
+      <h1 class="display-4">Générateur de code d'autoradio Renault</h1>
+      <p class="lead"><br>
+        Le code libre est disponible dans le <a href="https://github.com/bgalgeriien/Renault-Radio-Code">dépôt GitHub</a>.
+      </p>
     </div>
-  </footer>
+    
+    <div class="row">
+      <div class="form-group col-sm-12 col-md-6">
+        <label for="precode">Précode</label>
+        <input id="precode" x-model="precode" type="text" class="form-control" aria-label="précode de l'autoradio">
+      </div>
+      <div class="form-group col-sm-12 col-md-6">
+        <label for="code">Code</label>
+        <input id="code" x-model="code" type="text" class="form-control" readonly="readonly" aria-label="Code de sécurité de l'autoradio">
+      </div>
+    </div>
 
-  <script>
-    document.getElementById("codeForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const precode = document.getElementById("precode").value.toUpperCase();
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      if (!/^[A-Z][0-9]{3}$/.test(precode)) {
-        document.getElementById("resultat").textContent = "Précode invalide.";
-        return;
-      }
-      const letterValue = letters.indexOf(precode[0]);
-      const numberPart = parseInt(precode.slice(1));
-      const code = (letterValue * 1000 + numberPart + 1234) % 10000;
-      document.getElementById("resultat").textContent = "Code : " + code.toString().padStart(4, "0");
-    });
-  </script>
+    <!-- ----------- messages d'erreur -------------- -->
+    <div x-show="!test">
+      <div class="alert alert-warning" role="alert">
+        <strong>Le précode doit être composé d'une lettre suivie de 3 chiffres (exemple&nbsp;: <code>A123</code>).</strong><br>
+        Le précode est écrit à l’arrière de l’autoradio, mais peut être récupéré sans démontage <a href="https://youtu.be/nRGq3OI25Io">en appuyant simultanément</a> sur les touches <kbd>1</kbd> et <kbd>6</kbd> (ou <kbd>1</kbd> et <kbd>5</kbd>), puis en maintenant appuyé, appuyer sur le bouton d’alimentation.
+      </div>
+      <div :class="precode.startsWith('A0') ? 'alert-danger' :'alert-warning'" class='alert' role="alert">
+        <em>Le calcul du code ne fonctionne pas pour les précodes commençant par <strong><code>A0</code></strong>.</em>
+      </div>
+    </div>
+
+    <!-- ----------- instructions de saisie -------------- -->
+    <div x-show="test" class="alert alert-success" role="alert">
+      Pour activer votre autoradio&nbsp;:
+      <ol>
+        <li x-show="code[0]>0">Appuyez <strong><code x-text="code[0]"></code></strong> fois sur <kbd>1</kbd>.</li>
+        <li x-show="code[1]>0">Appuyez <strong><code x-text="code[1]"></code></strong> fois sur <kbd>2</kbd>.</li>
+        <li x-show="code[2]>0">Appuyez <strong><code x-text="code[2]"></code></strong> fois sur <kbd>3</kbd>.</li>
+        <li x-show="code[3]>0">Appuyez <strong><code x-text="code[3]"></code></strong> fois sur <kbd>4</kbd>.</li>
+        <li>Pour valider, maintenez appuyé sur <kbd>6</kbd> (ou <kbd>5</kbd>).</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Le lien vers le dépôt GitHub -->
+  <a href="https://github.com/bgalgeriien/Renault-Radio-Code" class="github-corner" aria-label="Voir le code source sur GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+  <style>
+    .github-corner:hover .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+    @keyframes octocat-wave {
+      0%, 100% { transform: rotate(0) }
+      20%, 60% { transform: rotate(-25deg) }
+      40%, 80% { transform: rotate(10deg) }
+    }
+    @media (max-width: 500px) {
+      .github-corner:hover .octo-arm { animation: none }
+      .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out }
+    }
+  </style>
 </body>
 </html>
