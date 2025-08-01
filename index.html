@@ -59,10 +59,35 @@
 <body>
 
   <div class="container">
-    <img src="https://drive.google.com/uc?export=view&id=1kn7qRm_o3ujAmlEFUm5CwKBNFENkUu5n" alt="Logo TechDoc888" class="logo">
+    <img src="https://bgalgeri.github.io/Renault-Radio-Code/logo.png" alt="Logo Renault Radio Code" class="logo">
     <h2>Générateur de Code</h2>
     <input type="text" id="precode" placeholder="Entrez un précode (ex: B698)" maxlength="4">
     <button onclick="generateCode()">Générer le code</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function code(precode) {
+      precode = precode.toUpperCase();
+      if (!/^[A-Z]\d{3}$/.test(precode) || precode.startsWith("A0")) {
+        return '';
+      }
+      let x = precode.charCodeAt(1) + precode.charCodeAt(0) * 10 - 698;
+      let y = precode.charCodeAt(3) + precode.charCodeAt(2) * 10 + x - 528;
+      let z = (y * 7) % 100;
+      let result = Math.floor(z / 10) + (z % 10) * 10 + ((259 % x) % 100) * 100;
+      return result.toString().padStart(4, '0');
+    }
+
+    function generateCode() {
+      const input = document.getElementById("precode").value.trim();
+      const result = code(input);
+      document.getElementById("result").textContent = result ? `Code généré : ${result}` : "Précode invalide !";
+    }
+  </script>
+
+</body>
+</html>    <button onclick="generateCode()">Générer le code</button>
     <div id="result"></div>
   </div>
 
