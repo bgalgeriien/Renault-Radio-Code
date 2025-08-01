@@ -1,61 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Générateur de Code Radio Renault</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-      background-color: #f4f4f4;
-    }
-    img {
-      width: 150px;
-      margin-bottom: 20px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renault Code G茅n茅rateur</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <img src="techdoc888_logo.png" alt="Logo">
-  <h1>Générateur de Code Radio Renault</h1>
-  
-  <input type="text" id="precode" placeholder="Entrez le précode (ex: B698)" maxlength="4" />
-  <br />
-  <button onclick="genererCode()">Générer le Code</button>
-  
-  <div id="result"></div>
+  <div class="lang-switch">
+    <button onclick="switchLang('fr')">馃嚝馃嚪 Fran莽ais</button>
+    <button onclick="switchLang('en')">馃嚞馃嚙 English</button>
+  </div>
 
-  <script>
-    function code(precode) {
-      precode = precode.toUpperCase();
-      if (!/^[A-Z]\d{3}$/.test(precode) || precode.startsWith("A0")) {
-        return '';
-      }
-      const x = precode.charCodeAt(1) + precode.charCodeAt(0) * 10 - 698;
-      const y = precode.charCodeAt(3) + precode.charCodeAt(2) * 10 + x - 528;
-      const z = (y * 7) % 100;
-      const finalCode = Math.floor(z / 10) + (z % 10) * 10 + ((259 % x) % 100) * 100;
-      return finalCode.toString().padStart(4, '0');
-    }
+  <div class="container">
+    <img src="techdoc888_logo.png" alt="Logo" class="logo">
+    <h1 data-lang="title">G茅n茅rateur de code autoradio Renault</h1>
 
-    function genererCode() {
-      const precode = document.getElementById('precode').value.trim();
-      const result = code(precode);
-      document.getElementById('result').textContent = result ? `Code : ${result}` : "Précode invalide.";
-    }
-  </script>
+    <form onsubmit="event.preventDefault(); generateCode();">
+      <label for="precode" data-lang="label">Entrez le pr茅code :</label>
+      <input type="text" id="precode" required>
+      <button type="submit" data-lang="button">Obtenir le code</button>
+    </form>
+
+    <p id="result"></p>
+
+    <div class="instructions">
+      <h2 data-lang="instructions-title">Comment trouver le pr茅code ?</h2>
+      <p data-lang="instructions">
+        Le pr茅code doit 锚tre compos茅 d'une lettre suivie de 3 chiffres (exemple : A123).<br>
+        Il est inscrit 脿 l鈥檃rri猫re de l鈥檃utoradio, mais peut 锚tre affich茅 sans d茅montage en appuyant sur les touches 1 et 6 (ou 1 et 5) tout en maintenant le bouton d鈥檃limentation.<br>
+        鈿狅笍 Le calcul du code ne fonctionne pas pour les pr茅codes qui commencent par A0.
+      </p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
